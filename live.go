@@ -72,7 +72,7 @@ func (s *liveService) path(pageType string) string {
 
 	path, ok := validPageTypes[pageType]
 	if !ok {
-		panic("Invalid pageType", pageType)
+		panic("Invalid pageType: " + pageType)
 	}
 	return path
 }
