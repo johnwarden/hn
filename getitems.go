@@ -4,17 +4,15 @@ import (
 	"fmt"
 	"sync"
 	"sync/atomic"
-
-	hn "github.com/johnwarden/hn"
 )
 
 const maxGoroutines = 100
 
 // GetItems gets a set of from the HN API in parallel.
-func (client *Client) GetItems(items []int) ([]hn.Item, error) {
+func (client *Client) GetItems(items []int) ([]Item, error) {
 
 	n := len(items)
-	results := make([]hn.Item, n)
+	results := make([]Item, n)
 
 	// Use a channel as a rate limiter. If there are more than
 	// nGoroutines running reading from the channel will block
