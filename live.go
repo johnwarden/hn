@@ -1,9 +1,9 @@
 package hn
 
 // LiveService communicates with the news
-// related endpoints in the Hacker News API
+// related pageTypes in the Hacker News API
 type LiveService interface {
-	TopStories() ([]int, error)
+	Stories(string) ([]int, error)
 	MaxItem() (int, error)
 	Updates() (*Updates, error)
 }
@@ -19,14 +19,34 @@ type Updates struct {
 	Profiles []string `json:"profiles"`
 }
 
-// TopStories is a convenience method proxying Live.TopStories
 func (c *Client) TopStories() ([]int, error) {
-	return c.Live.TopStories()
+	return c.Live.Stories("top")
+}
+
+func (c *Client) NewStories() ([]int, error) {
+	return c.Live.Stories("new")
+}
+
+func (c *Client) BestStories() ([]int, error) {
+	return c.Live.Stories("best")
+}
+
+func (c *Client) AskStories() ([]int, error) {
+	return c.Live.Stories("ask")
+}
+
+func (c *Client) ShowStories() ([]int, error) {
+	return c.Live.Stories("show")
+}
+
+// TopStories is a convenience method proxying Live.TopStories
+func (c *Client) Stories(pageType string) ([]int, error) {
+	return c.Live.Stories(pageType)
 }
 
 // TopStories retrieves the current top stories
-func (s *liveService) TopStories() ([]int, error) {
-	req, err := s.client.NewRequest(s.topStoriesPath())
+func (s *liveService) Stories(pageType string) ([]int, error) {
+	req, err := s.client.NewRequest(s.path(pageType))
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +60,21 @@ func (s *liveService) TopStories() ([]int, error) {
 	return value, nil
 }
 
-func (s *liveService) topStoriesPath() string {
-	return "topstories.json"
+func (s *liveService) path(pageType string) string {
+
+	validPageTypes := map[string]string{
+		"top":  "topstories.json",
+		"new":  "newstories.json",
+		"best": "beststories.json",
+		"ask":  "askstories.json",
+		"show": "showstories.json",
+	}
+
+	path, ok := validPageTypes[pageType]
+	if !ok {
+		panic("Invalid pageType", pageType)
+	}
+	return path
 }
 
 // MaxItem is a convenience method proxying Live.MaxItem
