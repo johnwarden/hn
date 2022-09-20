@@ -23,8 +23,8 @@ func (client *Client) GetItems(items []int) ([]Item, error) {
 
 	var wg sync.WaitGroup
 
-	var nSuccess int64 = 0
-
+	var nSuccess int64
+	
 	for index, itemID := range items {
 		acquire()
 		wg.Add(1)

@@ -19,32 +19,44 @@ type Updates struct {
 	Profiles []string `json:"profiles"`
 }
 
+// TopStories gets the ids of the stories on the Front (Top) page, in order.
 func (c *Client) TopStories() ([]int, error) {
 	return c.Live.Stories("top")
 }
 
+// NewStories gets the ids of the stories on the New page, in order.
 func (c *Client) NewStories() ([]int, error) {
 	return c.Live.Stories("new")
 }
 
+// BestStories gets the ids of the stories on the Best page, in order.
 func (c *Client) BestStories() ([]int, error) {
 	return c.Live.Stories("best")
 }
 
+// AskStories gets the ids of the stories on the Ask page, in order.
 func (c *Client) AskStories() ([]int, error) {
 	return c.Live.Stories("ask")
 }
 
+// ShowStories gets the ids of the stories on the Show page, in order.
 func (c *Client) ShowStories() ([]int, error) {
 	return c.Live.Stories("show")
 }
 
-// TopStories is a convenience method proxying Live.TopStories
+// JobStories gets the ids of the stories on the Show page, in order.
+func (c *Client) JobStories() ([]int, error) {
+	return c.Live.Stories("job")
+}
+
+
+// Stories gets the ids of the stories for the given pageType, where pageType is one of "top","new","best","ask","show",or "jobs"
 func (c *Client) Stories(pageType string) ([]int, error) {
 	return c.Live.Stories(pageType)
 }
 
-// TopStories retrieves the current top stories
+
+// Stories retrieves the current stories for the given page (where page is one of "top","new","best","ask", or "show")
 func (s *liveService) Stories(pageType string) ([]int, error) {
 	req, err := s.client.NewRequest(s.path(pageType))
 	if err != nil {
@@ -68,6 +80,7 @@ func (s *liveService) path(pageType string) string {
 		"best": "beststories.json",
 		"ask":  "askstories.json",
 		"show": "showstories.json",
+		"job":  "jobstories.json",
 	}
 
 	path, ok := validPageTypes[pageType]
