@@ -6,7 +6,7 @@ import (
 	"sync/atomic"
 )
 
-const maxGoroutines = 100
+const maxGoroutines = 10
 
 // GetItems gets a set of from the HN API in parallel.
 func (client *Client) GetItems(items []int) ([]Item, error) {
