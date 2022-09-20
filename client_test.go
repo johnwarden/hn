@@ -16,7 +16,7 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf(`c.BaseURL.String() = %q, want %q`, got, want)
 	}
 
-	if got, want := c.UserAgent, "hn.go/0.0.1"; got != want {
+	if got, want := c.UserAgent, "hn.go/0.0.2"; got != want {
 		t.Fatalf(`c.UserAgent = %q, want %q`, got, want)
 	}
 }
