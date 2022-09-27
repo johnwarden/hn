@@ -33,7 +33,6 @@ func (client *Client) GetItems(items []int) ([]Item, error) {
 			defer wg.Done()
 			item, err := client.Item(id)
 			if err != nil {
-				fmt.Println("failed to fetch story", id, err)
 				return
 			}
 			atomic.AddInt64(&nSuccess, 1)
@@ -43,7 +42,6 @@ func (client *Client) GetItems(items []int) ([]Item, error) {
 
 	wg.Wait()
 
-	fmt.Println("Number of successes", nSuccess, "out of", n)
 	if nSuccess != int64(n) {
 		return results, fmt.Errorf("Didn't successfully fetch all items.")
 	}
