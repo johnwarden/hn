@@ -1,13 +1,15 @@
 package hn
 
-import "testing"
+import (
+	"testing"
+	"context"
+)
 
 func TestTopStories(t *testing.T) {
 	ts, c := testServerAndClientByFixture("topstories")
 	defer ts.Close()
 
-	top, err := c.TopStories()
-
+	top, err := c.TopStories(context.Background())
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}
@@ -21,8 +23,7 @@ func TestMaxItem(t *testing.T) {
 	ts, c := testServerAndClientByFixture("maxitem")
 	defer ts.Close()
 
-	item, err := c.MaxItem()
-
+	item, err := c.MaxItem(context.Background())
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}
@@ -36,8 +37,7 @@ func TestUpdates(t *testing.T) {
 	ts, c := testServerAndClientByFixture("updates")
 	defer ts.Close()
 
-	updates, err := c.Updates()
-
+	updates, err := c.Updates(context.Background())
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}

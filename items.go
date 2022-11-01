@@ -1,6 +1,7 @@
 package hn
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
@@ -8,7 +9,7 @@ import (
 // ItemsService communicates with the news
 // related endpoints in the Hacker News API
 type ItemsService interface {
-	Get(id int) (*Item, error)
+	Get(ctx context.Context, id int) (*Item, error)
 }
 
 // itemsService implements ItemsService.
@@ -40,13 +41,13 @@ func (i *Item) Time() time.Time {
 }
 
 // Item is a convenience method proxying Items.Get
-func (c *Client) Item(id int) (*Item, error) {
-	return c.Items.Get(id)
+func (c *Client) Item(ctx context.Context, id int) (*Item, error) {
+	return c.Items.Get(ctx, id)
 }
 
 // Get retrieves an item with the given id
-func (s *itemsService) Get(id int) (*Item, error) {
-	req, err := s.client.NewRequest(s.getPath(id))
+func (s *itemsService) Get(ctx context.Context, id int) (*Item, error) {
+	req, err := s.client.NewRequest(ctx, s.getPath(id))
 	if err != nil {
 		return nil, err
 	}

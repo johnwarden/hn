@@ -1,6 +1,7 @@
 package hn
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -61,7 +62,7 @@ func NewClient(httpClients ...*http.Client) *Client {
 }
 
 // NewRequest creates an API request.
-func (c *Client) NewRequest(s string) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, s string) (*http.Request, error) {
 	rel, err := url.Parse(s)
 	if err != nil {
 		return nil, err
@@ -69,7 +70,7 @@ func (c *Client) NewRequest(s string) (*http.Request, error) {
 
 	u := c.BaseURL.ResolveReference(rel)
 
-	req, err := http.NewRequest("GET", u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
 		return nil, err
 	}

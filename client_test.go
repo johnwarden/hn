@@ -1,6 +1,7 @@
 package hn
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -22,8 +23,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestNewRequest(t *testing.T) {
-	r, err := NewClient(nil).NewRequest(fmt.Sprintf("foo?bar=%v", 123))
-
+	r, err := NewClient(nil).NewRequest(context.Background(), fmt.Sprintf("foo?bar=%v", 123))
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}
@@ -34,7 +34,7 @@ func TestNewRequest(t *testing.T) {
 }
 
 func TestNewRequest_invalidPath(t *testing.T) {
-	if _, err := NewClient(nil).NewRequest("%"); err == nil {
+	if _, err := NewClient(nil).NewRequest(context.Background(), "%"); err == nil {
 		t.Fatalf("expected to get error for invalid path")
 	}
 }

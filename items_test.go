@@ -1,13 +1,15 @@
 package hn
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func TestItem_8863(t *testing.T) {
 	ts, c := testServerAndClientByFixture("8863")
 	defer ts.Close()
 
-	item, err := c.Item(8863)
-
+	item, err := c.Item(context.Background(), 8863)
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}
@@ -29,8 +31,7 @@ func TestItem_8952(t *testing.T) {
 	ts, c := testServerAndClientByFixture("8952")
 	defer ts.Close()
 
-	item, err := c.Item(8952)
-
+	item, err := c.Item(context.Background(), 8952)
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}

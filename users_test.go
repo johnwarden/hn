@@ -1,13 +1,13 @@
 package hn
 
 import "testing"
+import "context"
 
 func TestUser(t *testing.T) {
 	ts, c := testServerAndClientByFixture("peterhellberg")
 	defer ts.Close()
 
-	user, err := c.User("peterhellberg")
-
+	user, err := c.User(context.Background(), "peterhellberg")
 	if err != nil {
 		t.Fatalf(`err != nil, got %v`, err)
 	}
@@ -25,7 +25,7 @@ func TestMissingUser(t *testing.T) {
 	ts, c := testServerAndClient([]byte(`{}`))
 	defer ts.Close()
 
-	if _, err := c.User(""); err != errMissingID {
+	if _, err := c.User(context.Background(), ""); err != errMissingID {
 		t.Fatalf(`err != errMissingID, got %v`, err)
 	}
 }

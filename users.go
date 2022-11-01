@@ -1,6 +1,7 @@
 package hn
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
@@ -10,7 +11,7 @@ var errMissingID = fmt.Errorf("missing id")
 // UsersService communicates with the news
 // related endpoints in the Hacker News API
 type UsersService interface {
-	Get(id string) (*User, error)
+	Get(ctx context.Context, id string) (*User, error)
 }
 
 // usersService implements LiveService.
@@ -34,17 +35,17 @@ func (u *User) CreatedTime() time.Time {
 }
 
 // User is a convenience method proxying Users.Get
-func (c *Client) User(id string) (*User, error) {
-	return c.Users.Get(id)
+func (c *Client) User(ctx context.Context, id string) (*User, error) {
+	return c.Users.Get(ctx, id)
 }
 
 // Get retrieves a user with the given id
-func (s *usersService) Get(id string) (*User, error) {
+func (s *usersService) Get(ctx context.Context, id string) (*User, error) {
 	if id == "" {
 		return nil, errMissingID
 	}
 
-	req, err := s.client.NewRequest(s.getPath(id))
+	req, err := s.client.NewRequest(ctx, s.getPath(id))
 	if err != nil {
 		return nil, err
 	}
