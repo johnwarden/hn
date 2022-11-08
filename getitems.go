@@ -30,6 +30,7 @@ func (client *Client) GetItems(ctx context.Context, items []int, maxGoroutines i
 
 	var nSuccess int64
 
+	contextCanceled := false
 STORIES:
 	for index, itemID := range items {
 		acquire()
@@ -51,6 +52,7 @@ STORIES:
 
 		select {
 		case <-ctx.Done():
+			contextCanceled = true
 			break STORIES
 		default:
 		}
@@ -60,6 +62,9 @@ STORIES:
 	wg.Wait()
 
 	if nSuccess != int64(n) {
+		if contextCanceled {
+			return results, ctx.Err()
+		}
 		return results, fmt.Errorf("Didn't successfully fetch all items.")
 	}
 
